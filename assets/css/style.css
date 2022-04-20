@@ -67,12 +67,26 @@ header > h1 {
 .myquizzes button:hover{
     cursor: pointer;
 }
-.principal nav:nth-child(2) {
-    margin-top: 80px;
-}
 .principal .title {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
+}
+.principal > nav:nth-child(2){
+    margin-top: 80px;
+    width: 1051px;
+}
+.quizzes {
+    display: grid;
+}
+
+.quizz:hover {
+    cursor: pointer;
+}
+
+.quizzes img {
+    border-radius: 5px;
+    width: 340px;
+    height: 181px;
 }
