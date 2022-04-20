@@ -13,8 +13,12 @@ function renderizarQuizzesServer(){
                                 </div>`
 
     } 
-
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/2');
     promiseGet.then(quizzes);
 }
 renderizarQuizzesServer();
+
+
+
+
+console.log("teste de git");
