@@ -1,4 +1,5 @@
 
+
 function renderizarQuizzesServer(){
 
 
@@ -22,3 +23,11 @@ renderizarQuizzesServer();
 
 
 console.log("teste de git");
+//const container = lista_idquizz.map(renderizarQuizzesServer);
+//container();
+
+function aaaa (teste) {
+
+    console.log('oiiii');
+
+}
