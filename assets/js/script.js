@@ -1,4 +1,5 @@
 
+
 function renderizarQuizzesServer(){
 
 
@@ -17,4 +18,11 @@ function renderizarQuizzesServer(){
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/2');
     promiseGet.then(quizzes);
 }
-renderizarQuizzesServer();
+//const container = lista_idquizz.map(renderizarQuizzesServer);
+//container();
+
+function aaaa () {
+
+    console.log('oiiii');
+
+}
