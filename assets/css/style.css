@@ -78,15 +78,38 @@ header > h1 {
     width: 1051px;
 }
 .quizzes {
-    display: grid;
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
-
+.quizz {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    position: relative;
+    margin: 10px 5px;
+}
 .quizz:hover {
     cursor: pointer;
 }
 
-.quizzes img {
+.quizz img {
     border-radius: 5px;
     width: 340px;
     height: 181px;
+}
+.titulo {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    color: #FFFFFF;
+    padding: 30px 10px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    background: rgb(13,14,14);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5), rgba(0,0,0,0.8), rgba(0,0,0,0.01));
 }
