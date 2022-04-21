@@ -7,6 +7,30 @@ let id_quizz; // APENAS O NUMERO
 
 function renderizarQuizzesServer(){
 
+    document.querySelector("body").innerHTML = `    <header>
+                                                        <h1>BuzzQuizz</h1>
+                                                    </header>
+                                                    <div class="principal">
+                                                        <div class="myquizzes">
+                                                            <p>
+                                                                Você não criou nenhum <br>quizz ainda :(
+                                                            </p>
+                                                            <button class="make-quizz">
+                                                                Criar Quizz
+                                                            </button>
+                                                        </div>
+
+                                                        <nav>
+                                                            <h1 class="title" >Todos os quizzes</h1>
+                                                            <div class="quizzes">
+
+
+                                                            
+                                                        </nav>
+                                                    </div>
+                                                    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                                                    <script src="assets/js/script.js"></script>   `
+
     const container = document.querySelector(".quizzes");
     const quizzes = (obj) => {
         const dados = obj.data;
