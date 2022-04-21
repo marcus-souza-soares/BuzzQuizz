@@ -12,7 +12,7 @@ function renderizarQuizzesServer(){
         const dados = obj.data;
 
         for (i = 0; i < dados.length; i++){
-            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url(${dados[i].image})" onclick="paginaQuizz(this)">
+            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this)">
                                     
                                         <div class="titulo">
                                             <h2>${dados[i].title}</h2>
@@ -61,7 +61,21 @@ function paginaQuizz (elemento) {
         //dar um jeito de fazer com que a 
         document.querySelector(".capa img").src = dados.image;
         document.querySelector(".capa h1").innerHTML = dados.title;
-       
+
+        let questions_list = dados.questions.length;
+
+        for (i = 0; i < questions_list; i++){
+            document.querySelector("main").innerHTML += `<div class="container">
+                                                        <div class="titulo-pergunta">
+                                                            <h1>${dados.questions[i].title}</h1>
+                                                        </div>
+                                                        <div class="perguntas">
+
+                                                        </div>
+                                                    </div>`
+        }
+        
+                                                    
     }
         
         
