@@ -44,21 +44,23 @@ function paginaQuizz (elemento) {
                                 <h1>BuzzQuizz</h1>
                             </header>
                             <nav class="capa">
-                                
+                                <img src="">
+                                <h1></h1>
                             </nav>
                             <main>
 
                             </main>
                             
                             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-                            <script src="assets/js/script.js"></script>  `
+                            <script src="assets/js/script.js"></script> `
     
 
     const quizzes = (obj) => {
         const dados = obj.data;
         console.log(dados)
-        //apenas para ver se ta funcionando, o codigo ta sendo construido
-        document.querySelector(".capa").style.background = `url(${dados.image}) no-repeat`;
+        //dar um jeito de fazer com que a 
+        document.querySelector(".capa img").src = dados.image;
+        document.querySelector(".capa h1").innerHTML = dados.title;
        
     }
         
