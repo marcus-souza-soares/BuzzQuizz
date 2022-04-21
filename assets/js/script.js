@@ -71,3 +71,34 @@ function paginaQuizz (elemento) {
     promiseGet.then(quizzes);
 
 }
+
+//Função para adicionar eventos dos componentes renderizados
+function anexarEventos(){
+    document.querySelector(".make-quizz").addEventListener("click", function () {
+        renderFormQuizz();
+    });
+}
+
+anexarEventos();
+
+//Renderizar form do quizz
+function renderFormQuizz(){
+    const container = document.querySelector(".principal");
+
+    container.innerHTML = ` <div class="form-quizz-stt">
+                                <div>
+                                    <h2>Comece pelo começo</h2>
+                                    <div class="box-inputs">
+                                        <input type="text" placeholder="Título do seu quizz">
+                                        <input type="text" placeholder="URL da imagem do seu quizz">
+                                        <input type="text" placeholder="Quantidade de perguntas do quizz">
+                                        <input type="text" placeholder="Quantidade de níveis do quizz">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button onclick="renderFormPergs()">Prosseguir pra criar perguntas</button>
+                                </div>
+                            </div>`;
+
+    
+}
