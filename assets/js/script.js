@@ -89,14 +89,23 @@ function paginaQuizz (elemento) {
         let questions_list = dados.questions.length;
 
         for (i = 0; i < questions_list; i++){
-            document.querySelector("main").innerHTML += `<div class="container">
-                                                        <div class="titulo-pergunta">
-                                                            <h1>${dados.questions[i].title}</h1>
-                                                        </div>
-                                                        <div class="perguntas">
+            document.querySelector("main").innerHTML += `<div id="container${i}" class="container">
+                                                            <div  class="titulo-pergunta">
+                                                                <h1>${dados.questions[i].title}</h1>
+                                                            </div>
+                                                            <div id="pergunta${i}" class="alternativas">
 
-                                                        </div>
-                                                    </div>`
+                                                            </div>
+                                                        </div>`
+            document.querySelector(`#container${i} .titulo-pergunta`).style.backgroundColor = dados.questions[i].color;
+
+            const renderAlternativas = dados.questions[i].answers.map(function (resposta) {
+            document.querySelector(`#pergunta${i}`).innerHTML +=    `<div>
+                                                                        <img src="${resposta.image}">
+                                                                        <h2>${resposta.text}</h2>
+                                                                    </div>`
+            });
+    
         }
         
                                                     

@@ -136,7 +136,9 @@ header>h1 {
 
 
 /* -------------- Página do quizz -------------------- */
-
+body{
+    background-color: #FAFAFA;
+}
 .capa {
     width: 100%;
     height: 227px;
@@ -169,11 +171,37 @@ header>h1 {
 
 .container {
     width: 760px;
+    height: auto;
     margin: 30px auto;
     padding: 30px;
     background-color: #FFFFFF;
-    box-shadow: 5px #B9B9B9;
+    box-shadow:5px 5px 5px #B9B9B9;
+}
 
+.titulo-pergunta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 138px;
+    color: #FFFFFF;
+    margin-bottom: 30px;
+
+}
+.alternativas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.alternativas div img {
+    width: 329px;
+    height: 175px;
+}
+.alternativas h2 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 
