@@ -8,7 +8,6 @@ let id_quizz;
 
 function renderizarQuizzesServer(){
 
-
     const container = document.querySelector(".quizzes");
     const quizzes = (obj) => {
         const dados = obj.data;
@@ -38,8 +37,11 @@ renderizarQuizzesServer();
 function paginaQuizz () {
 
     //@LIMPAR A PÁGINA@
-    const container = document.querySelector(".principal");
-    container.innerHTML = ""
+    const container = document.querySelector("body");
+    container.innerHTML = `<header>
+                                <h1>BuzzQuizz</h1>
+                            </header>`
+
 
     const quizzes = (obj) => {
         const dados = obj.data;
