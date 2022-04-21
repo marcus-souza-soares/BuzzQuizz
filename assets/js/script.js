@@ -1,8 +1,7 @@
 
 //Variavies globais
-let id_quizz;
 
-
+let id_quizz; // APENAS O NUMERO
 
 
 
@@ -13,18 +12,19 @@ function renderizarQuizzesServer(){
         const dados = obj.data;
 
         for (i = 0; i < dados.length; i++){
-            container.innerHTML += `<div class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url(${dados[i].image})" onclick="paginaQuizz()">
+            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url(${dados[i].image})" onclick="paginaQuizz(this)">
                                     
                                         <div class="titulo">
                                             <h2>${dados[i].title}</h2>
                                         </div>
                                     </div>`
+
         }
 
-        //GUARDAR O ID DO QUIZ
+        
 
     } // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
-    const promiseGet = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes');
+    const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
     promiseGet.then(quizzes);
 }
 renderizarQuizzesServer();
@@ -34,8 +34,10 @@ renderizarQuizzesServer();
 
 // Parte do código de abrir um quiz - do usuario ou do sever
 
-function paginaQuizz () {
+function paginaQuizz (elemento) {
 
+    id_quizz = elemento.id;
+    console.log(id_quizz);
     //@LIMPAR A PÁGINA@
     const container = document.querySelector("body");
     container.innerHTML = `<header>
@@ -46,19 +48,24 @@ function paginaQuizz () {
                             </nav>
                             <main>
 
-                            </main>`
+                            </main>
+                            
+                            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                            <script src="assets/js/script.js"></script>  `
+    
 
     const quizzes = (obj) => {
         const dados = obj.data;
+        console.log(dados)
         //apenas para ver se ta funcionando, o codigo ta sendo construido
-        console.log(id_quizz);    
+        document.querySelector(".capa").style.background = `url(${dados.image}) no-repeat`;
        
     }
         
         
 
      // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
-    const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id_quizz}`);
+    const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${elemento.id}`);
     promiseGet.then(quizzes);
 
 }
