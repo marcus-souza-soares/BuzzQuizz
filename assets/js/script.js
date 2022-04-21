@@ -14,8 +14,8 @@ function renderizarQuizzesServer(){
         const dados = obj.data;
 
         for (i = 0; i < dados.length; i++){
-            container.innerHTML += `<div class="quizz" onclick="paginaQuizz()">
-                                        <img src=${dados[i].image}>
+            container.innerHTML += `<div class="quizz" style="background-image:url(${dados[i].image})" onclick="paginaQuizz()">
+                                    
                                         <div class="titulo">
                                             <h2>${dados[i].title}</h2>
                                         </div>
