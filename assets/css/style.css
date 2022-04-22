@@ -19,6 +19,12 @@ header {
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 10px black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    z-index: 1;
 
 }
 
@@ -136,8 +142,11 @@ header>h1 {
 
 
 /* -------------- Página do quizz -------------------- */
-
+body{
+    background-color: #FAFAFA;
+}
 .capa {
+    margin-top: 65px;
     width: 100%;
     height: 227px;
     display: flex;
@@ -164,16 +173,55 @@ header>h1 {
     color: #FFFFFF;
     position: absolute;
 
+}
 
+.capa div {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
 }
 
 .container {
     width: 760px;
+    height: auto;
     margin: 30px auto;
     padding: 30px;
     background-color: #FFFFFF;
-    box-shadow: 5px #B9B9B9;
+    box-shadow:5px 5px 5px #B9B9B9;
+}
 
+.titulo-pergunta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 138px;
+    color: #FFFFFF;
+    margin-bottom: 30px;
+
+}
+.alternativas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.alternativas div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 329px;
+}
+.alternativas div img {
+    width: 329px;
+    height: 175px;
+}
+.alternativas h2 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 

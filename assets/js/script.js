@@ -8,6 +8,30 @@ const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
 
 function renderizarQuizzesServer(){
 
+    document.querySelector("body").innerHTML = `    <header>
+                                                        <h1>BuzzQuizz</h1>
+                                                    </header>
+                                                    <div class="principal">
+                                                        <div class="myquizzes">
+                                                            <p>
+                                                                Você não criou nenhum <br>quizz ainda :(
+                                                            </p>
+                                                            <button class="make-quizz">
+                                                                Criar Quizz
+                                                            </button>
+                                                        </div>
+
+                                                        <nav>
+                                                            <h1 class="title" >Todos os quizzes</h1>
+                                                            <div class="quizzes">
+
+
+                                                            
+                                                        </nav>
+                                                    </div>
+                                                    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                                                    <script src="assets/js/script.js"></script>   `
+
     const container = document.querySelector(".quizzes");
     const quizzes = (obj) => {
         const dados = obj.data;
@@ -46,6 +70,7 @@ function paginaQuizz (elemento) {
                             </header>
                             <nav class="capa">
                                 <img src="">
+                                <div></div>
                                 <h1></h1>
                             </nav>
                             <main>
@@ -66,14 +91,32 @@ function paginaQuizz (elemento) {
         let questions_list = dados.questions.length;
 
         for (i = 0; i < questions_list; i++){
-            document.querySelector("main").innerHTML += `<div class="container">
-                                                        <div class="titulo-pergunta">
-                                                            <h1>${dados.questions[i].title}</h1>
-                                                        </div>
-                                                        <div class="perguntas">
+            document.querySelector("main").innerHTML += `<div id="container${i}" class="container">
+                                                            <div  class="titulo-pergunta">
+                                                                <h1>${dados.questions[i].title}</h1>
+                                                            </div>
+                                                            <div id="pergunta${i}" class="alternativas">
 
-                                                        </div>
-                                                    </div>`
+                                                            </div>
+                                                        </div>`
+            document.querySelector(`#container${i} .titulo-pergunta`).style.backgroundColor = dados.questions[i].color;
+
+            //embaralhamento das respostas
+            let sorted_answes = dados.questions[i].answers.sort(comparador);
+            function comparador() { 
+                return Math.random() - 0.5; 
+            }
+            
+            const renderAlternativas = sorted_answes.map(function (resposta) {
+
+            
+            
+            document.querySelector(`#pergunta${i}`).innerHTML +=    `<div>
+                                                                        <img src="${resposta.image}">
+                                                                        <h2>${resposta.text}</h2>
+                                                                    </div>`
+            });
+    
         }
         
                                                     
