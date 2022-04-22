@@ -2,7 +2,8 @@
 //Variavies globais
 
 let id_quizz; // APENAS O NUMERO
-
+const REGEX_URL_IMG = "^((http)|(https)|(ftp)):\/\/+(.)+(?:jpg|gif|png|jpeg)$";
+const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
 
 
 function renderizarQuizzesServer(){
@@ -27,7 +28,7 @@ function renderizarQuizzesServer(){
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
     promiseGet.then(quizzes);
 }
-renderizarQuizzesServer();
+//renderizarQuizzesServer();
 
 
 
@@ -86,33 +87,153 @@ function paginaQuizz (elemento) {
 
 }
 
-//Função para adicionar eventos dos componentes renderizados
-function anexarEventos(){
-    document.querySelector(".make-quizz").addEventListener("click", function () {
-        renderFormQuizz();
-    });
-}
 
-anexarEventos();
 
 //Renderizar form do quizz
 function renderFormQuizz(){
     const container = document.querySelector(".principal");
-
-    container.innerHTML = ` <div class="form-quizz-stt">
+    container.innerHTML = ` <form class="form-quizz-stt" onsubmit="event.preventDefault()">
                                 <div>
                                     <h2>Comece pelo começo</h2>
                                     <div class="box-inputs">
-                                        <input type="text" placeholder="Título do seu quizz">
-                                        <input type="text" placeholder="URL da imagem do seu quizz">
-                                        <input type="text" placeholder="Quantidade de perguntas do quizz">
-                                        <input type="text" placeholder="Quantidade de níveis do quizz">
+                                        <input class="titulo" type="text" minlength="20" maxlength="65" placeholder="Título do seu quizz" required>
+                                        <input class="imagem" type="url" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem do seu quizz" required>
+                                        <input class="num-pergs" type="number" min="3" placeholder="Quantidade de perguntas do quizz" required>
+                                        <input class="num-niveis" type="number" min="2" placeholder="Quantidade de níveis do quizz" required>
                                     </div>
                                 </div>
                                 <div>
-                                    <button onclick="renderFormPergs()">Prosseguir pra criar perguntas</button>
+                                    <button class="form-quizz-btn" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
                                 </div>
-                            </div>`;
+                            </form>`;
+
 
     
 }
+
+//Renderizar perguntas do quizz
+function renderFormPergs(el){
+ 
+   const titulo = el.querySelector(".titulo").value;
+   const imagem = el.querySelector(".imagem").value;
+   const numPergs = parseInt(el.querySelector(".num-pergs").value);
+   const numNiveis = parseInt(el.querySelector(".num-niveis").value);
+
+  localStorage.setItem('quizz', {
+      title: titulo,
+      image: imagem,
+      questions: []
+  });
+
+   let perguntas = [];
+
+   for(let i = 0; i < numPergs; i++){ 
+
+        perguntas.push(`<div class="form-pergunta">
+                            <div class="pergunta">
+                                <h3>Pergunta tal</h3>
+                                <input type="text" class="titulo" minlength="20" placeholder="Texto da pergunta" required>
+                                <input type="text"class="cor" pattern="${REGEX_HEXA_COLOR}" placeholder="Cor de fundo da pergunta" required>
+                            </div>
+                            <div class="resposta correta">
+                                <h3>Resposta correta</h3>
+                                <input type="text" class="texto" placeholder="Resposta correta" required>
+                                <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem">
+                            </div>
+                            <div class="resposta incorreta">
+                                <h3>Respostas incorretas</h3>
+                                <div class="incorreta-um">
+                                    <input type="text" class="texto" placeholder="Resposta incorreta 1" required>
+                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 1">
+                                </div>
+                                <div class="incorreta-dois">
+                                    <input type="text" class="texto" placeholder="Resposta incorreta 2">
+                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 2">
+                                </div>
+                                <div class="incorreta-tres">
+                                    <input type="text" class="texto" placeholder="Resposta incorreta 3">
+                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 3">
+                                </div>
+                            </div>
+                        </div>`);
+    };
+    
+    const container = document.querySelector(".principal");
+
+    container.innerHTML =  ` <form class="form-quizz-pergs" onsubmit="event.preventDefault()">
+                                <div>
+                                ${perguntas.map(item => item)}
+                                </div>
+                                <div>
+                                    <button class="form-quizz-btn" onclick="renderFormNiveis(this.parentNode.previousSibling,${numNiveis})">Prosseguir pra criar níveis</button>
+                                </div>
+                            </form>`;
+
+}
+
+//Renderizaconsole.log("entrou");r níveis do quizz
+function renderFormNiveis(el, numNiveis){
+
+   /*  const titulos = [...el.querySelectorAll(".pergunta").childNodes[1]];
+    const cores = [...el.querySelectorAll(".pergunta").querySelectorAll(".cor").value];
+    const textRespCorr = [...el.querySelectorAll(".resposta.correta").querySelectorAll(".texto").value];
+    const imgRespCorr = [...el.querySelectorAll(".resposta.correta").querySelectorAll(".imagem").value];
+    const textRespInc1 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-um").querySelectorAll(".texto").value];
+    const imgRespInc1 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-um").querySelectorAll(".imagem").value];
+    const textRespInc2 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-dois").querySelectorAll(".texto").value];
+    const imgRespInc2 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-dois").querySelectorAll(".imagem").value];
+    const textRespInc3 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-tres").querySelectorAll(".texto").value];
+    const imgRespInc3 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-trs").querySelectorAll(".imagem").value]; */
+
+    console.log(titulos);
+   /*  console.log(cores);
+    console.log(textRespCorr);
+    console.log(imgRespCorr);
+    console.log(textRespInc1);
+    console.log(imgRespInc1);
+    console.log(textRespInc2);
+    console.log(textRespInc3);
+    console.log(imgRespInc2); */
+
+
+
+
+    let niveis = [];
+
+    for(let i = 0; i < numNiveis; i++){
+        niveis.push(
+            `<div class="form-nivel">
+                <h3>Nível tal</h3>
+                <div class="nivel">
+                    <input type="text" minlength="10" placeholder="Título do nível" required>
+                    <input type="number" min="0" max="100" placeholder="% de acerto mínima" required>
+                    <input type="url" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem do nível" required>
+                    <input type="text" minlength="30" placeholder="Descrição do nível" required>
+                </div>
+            </div>`);
+    }
+
+    const container = document.querySelector(".principal");
+
+    container.innerHTML =  ` <form class="form-quizz-niveis" onsubmit="event.preventDefault()">
+                                ${niveis.map(item => item)}
+                                <div>
+                                    <button class="form-quizz-btn" onclick="salvarQuizz()">Prosseguir pra criar níveis</button>
+                                </div>
+                            </form>`;
+
+}
+
+function salvarQuizz(){
+    console.log("salvei");
+}
+
+   
+   
+   
+   
+
+
+
+
+
