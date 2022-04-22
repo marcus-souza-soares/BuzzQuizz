@@ -69,6 +69,7 @@ function paginaQuizz (elemento) {
                             </header>
                             <nav class="capa">
                                 <img src="">
+                                <div></div>
                                 <h1></h1>
                             </nav>
                             <main>
@@ -99,7 +100,16 @@ function paginaQuizz (elemento) {
                                                         </div>`
             document.querySelector(`#container${i} .titulo-pergunta`).style.backgroundColor = dados.questions[i].color;
 
-            const renderAlternativas = dados.questions[i].answers.map(function (resposta) {
+            //embaralhamento das respostas
+            let sorted_answes = dados.questions[i].answers.sort(comparador);
+            function comparador() { 
+                return Math.random() - 0.5; 
+            }
+            
+            const renderAlternativas = sorted_answes.map(function (resposta) {
+
+            
+            
             document.querySelector(`#pergunta${i}`).innerHTML +=    `<div>
                                                                         <img src="${resposta.image}">
                                                                         <h2>${resposta.text}</h2>

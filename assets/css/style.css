@@ -19,6 +19,12 @@ header {
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 10px black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    z-index: 1;
 
 }
 
@@ -140,6 +146,7 @@ body{
     background-color: #FAFAFA;
 }
 .capa {
+    margin-top: 65px;
     width: 100%;
     height: 227px;
     display: flex;
@@ -166,7 +173,13 @@ body{
     color: #FFFFFF;
     position: absolute;
 
+}
 
+.capa div {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
 }
 
 .container {
@@ -193,6 +206,11 @@ body{
     flex-wrap: wrap;
     justify-content: space-between;
 }
+.alternativas div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 329px;
+}
 .alternativas div img {
     width: 329px;
     height: 175px;
@@ -202,6 +220,8 @@ body{
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 
