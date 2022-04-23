@@ -46,8 +46,6 @@ function renderizarQuizzesServer(){
 
         }
 
-        
-
     } // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
     promiseGet.then(quizzes);
@@ -124,6 +122,14 @@ function quizzClicado(el){
     el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
     el.style.zIndex = "1";
 
+    let respostas_falsas = el.parentNode.querySelectorAll(".false");
+    for (i = 0; i < respostas_falsas.length; i++){
+
+
+        respostas_falsas[i].style.color="#FF4B4B";
+    }
+
+    el.parentNode.querySelector(".true").querySelector("h2").style.color = "#009C22";
 }
 
 //Renderizar form do quizz
