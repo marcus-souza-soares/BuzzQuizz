@@ -46,13 +46,11 @@ function renderizarQuizzesServer(){
 
         }
 
-        
-
     } // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
     promiseGet.then(quizzes);
 }
-//renderizarQuizzesServer();
+renderizarQuizzesServer();
 
 
 
@@ -80,8 +78,8 @@ function paginaQuizz (elemento) {
                             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
                             <script src="assets/js/script.js"></script> `
     
-
     const quizzes = (obj) => {
+
         const dados = obj.data;
         console.log(dados)
         //dar um jeito de fazer com que a 
@@ -98,6 +96,7 @@ function paginaQuizz (elemento) {
                                                             <div id="pergunta${i}" class="alternativas">
 
                                                             </div>
+                                                            <div></div>
                                                         </div>`
             document.querySelector(`#container${i} .titulo-pergunta`).style.backgroundColor = dados.questions[i].color;
 
@@ -108,29 +107,30 @@ function paginaQuizz (elemento) {
             }
             
             const renderAlternativas = sorted_answes.map(function (resposta) {
-
-            
-            
-            document.querySelector(`#pergunta${i}`).innerHTML +=    `<div>
+            document.querySelector(`#pergunta${i}`).innerHTML +=    `<div class="${resposta.isCorrectAnswer}" onclick="quizzClicado(this)">
                                                                         <img src="${resposta.image}">
                                                                         <h2>${resposta.text}</h2>
                                                                     </div>`
             });
-    
-        }
-        
-                                                    
+        }                                             
     }
-        
-        
-
-     // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
     const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${elemento.id}`);
     promiseGet.then(quizzes);
-
 }
 
+function quizzClicado(el){
+    el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
+    el.style.zIndex = "1";
 
+    let respostas_falsas = el.parentNode.querySelectorAll(".false");
+    for (i = 0; i < respostas_falsas.length; i++){
+
+
+        respostas_falsas[i].style.color="#FF4B4B";
+    }
+
+    el.parentNode.querySelector(".true").querySelector("h2").style.color = "#009C22";
+}
 
 //Renderizar form do quizz
 function renderFormQuizz(){
