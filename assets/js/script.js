@@ -184,11 +184,12 @@ function renderFormPergs(el){
    const numPergs = parseInt(el.querySelector(".num-pergs").value);
    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
 
-  localStorage.setItem('quizz', {
+  localStorage.setItem("quizz", JSON.stringify({
       title: titulo,
       image: imagem,
-      questions: []
-  });
+      questions: [],
+      levels: []
+  }));
 
    let perguntas = [];
 
@@ -230,7 +231,7 @@ function renderFormPergs(el){
                                 ${perguntas.map(item => item)}
                                 </div>
                                 <div>
-                                    <button class="form-quizz-btn" onclick="renderFormNiveis(this.parentNode.previousSibling,${numNiveis})">Prosseguir pra criar níveis</button>
+                                    <button class="form-quizz-btn" onclick="renderFormNiveis(this.parentNode.parentNode,${numNiveis})">Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
 
@@ -238,29 +239,51 @@ function renderFormPergs(el){
 
 //Renderizaconsole.log("entrou");r níveis do quizz
 function renderFormNiveis(el, numNiveis){
+    
+    let dadosPerg = [];
 
-   /*  const titulos = [...el.querySelectorAll(".pergunta").childNodes[1]];
-    const cores = [...el.querySelectorAll(".pergunta").querySelectorAll(".cor").value];
-    const textRespCorr = [...el.querySelectorAll(".resposta.correta").querySelectorAll(".texto").value];
-    const imgRespCorr = [...el.querySelectorAll(".resposta.correta").querySelectorAll(".imagem").value];
-    const textRespInc1 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-um").querySelectorAll(".texto").value];
-    const imgRespInc1 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-um").querySelectorAll(".imagem").value];
-    const textRespInc2 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-dois").querySelectorAll(".texto").value];
-    const imgRespInc2 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-dois").querySelectorAll(".imagem").value];
-    const textRespInc3 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-tres").querySelectorAll(".texto").value];
-    const imgRespInc3 = [...el.querySelectorAll(".resposta.incorreta").querySelectorAll(".incorreta-trs").querySelectorAll(".imagem").value]; */
+    const perguntas = [...el.querySelectorAll(".form-pergunta")];
 
-    console.log(titulos);
-   /*  console.log(cores);
-    console.log(textRespCorr);
-    console.log(imgRespCorr);
-    console.log(textRespInc1);
-    console.log(imgRespInc1);
-    console.log(textRespInc2);
-    console.log(textRespInc3);
-    console.log(imgRespInc2); */
+    perguntas.map(
+        item => {
+            let pergunta = {
+                title: item.children[0].children[1].value,
+                color: item.children[0].children[2].value,
+                answers: [
+                    {
+                        text: item.children[1].children[1].value,
+                        image: item.children[1].children[2].value,
+						isCorrectAnswer: true
+                    }
+                ]
+            }
 
+            const respIncorr = [...item.children[2].children];
 
+            respIncorr.map(
+                resp => {
+                    if(respIncorr.indexOf(resp) > 0 && !!resp.children[0].value){
+                        pergunta.answers.push(
+                            {
+                                text: resp.children[0].value,
+                                image: resp.children[1].value,
+                                isCorrectAnswer: false 
+                            }
+                        )
+                    }
+                }
+                
+            );
+
+            dadosPerg.push(pergunta);
+        }
+    );
+
+    console.log(dadosPerg);
+
+    let quizz = JSON.parse(localStorage.getItem("quizz"));
+    quizz.questions = dadosPerg;
+    localStorage.setItem("quizz", JSON.stringify(quizz));
 
 
     let niveis = [];
@@ -283,14 +306,54 @@ function renderFormNiveis(el, numNiveis){
     container.innerHTML =  ` <form class="form-quizz-niveis" onsubmit="event.preventDefault()">
                                 ${niveis.map(item => item)}
                                 <div>
-                                    <button class="form-quizz-btn" onclick="salvarQuizz()">Prosseguir pra criar níveis</button>
+                                    <button class="form-quizz-btn" onclick="salvarQuizz(this.parentNode.parentNode)">Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
 
 }
 
-function salvarQuizz(){
-    console.log("salvei");
+function salvarQuizz(el){
+
+    let dadosNiveis = [];
+    
+    const niveis = [...el.querySelectorAll(".form-nivel")]; 
+
+    niveis.map(
+        item => {
+            let nivel = {
+                title: item.children[1].children[0].value,
+				image: item.children[1].children[2].value,
+				text: item.children[1].children[3].value,
+				minValue: item.children[1].children[1].value
+            }
+
+            dadosNiveis.push(nivel);
+        }
+    );
+
+    console.log(dadosNiveis);
+
+    let quizz = JSON.parse(localStorage.getItem("quizz"));
+    quizz.levels = dadosNiveis;
+    localStorage.setItem("quizz", JSON.stringify(quizz));
+
+    enviarQuizz(quizz);
+
+}
+
+
+function enviarQuizz(obj){
+
+    console.log(obj);
+
+    const promisse = axios.post('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
+
+    promisse.then(resp => {
+        console.log("salvou");
+        console.log(resp);
+    });
+
+    promisse.catch(resp => console.log(resp));
 }
 
    

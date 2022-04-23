@@ -326,3 +326,15 @@ button:hover{
     color: #FFF5F4;
 }
 
+
+/* -------------- Form das perguntas do quizz -------------------- */
+
+.principal .form-quizz-pergs{
+    margin-top: 70px;
+}
+
+/* -------------- Form dos niveis do quizz -------------------- */
+
+.principal .form-quizz-niveis{
+    margin-top: 70px;
+}
