@@ -3,6 +3,9 @@
 
 let id_quizz; // APENAS O NUMERO
 let questions_qtd;
+let qtd_acertos = 0;
+let porcentagem_acerto; 
+
 const REGEX_URL_IMG = "^((http)|(https)|(ftp)):\/\/+(.)+(?:jpg|gif|png|jpeg)$";
 const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
 
@@ -121,11 +124,18 @@ function paginaQuizz (elemento) {
 }
 
 function quizzClicado(el){
+
+    // adiciona +1 a cada acerto
+    if (el.classList.contains("true")){
+        qtd_acertos+=1;
+        console.log(qtd_acertos)
+    }
     
     //estilo do clique
     function estiloPerguntas () {
         el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
         el.style.zIndex = "1";
+        
 
         let respostas_falsas = el.parentNode.querySelectorAll(".false");
         for (i = 0; i < respostas_falsas.length; i++){
@@ -139,16 +149,18 @@ function quizzClicado(el){
 
     //scroll pra proxima pergunta
     let proximaPergunta = () => {
-    
         document.querySelector(".notscroll").scrollIntoView();
-        
     }
     setTimeout(proximaPergunta,2000);
 
     //tratamento das repostas
-     if (document.querySelectorAll(".branco").length === questions_qtd){
+    if (document.querySelectorAll(".branco").length === questions_qtd){
         alert("Quizz finalizado!");
-     }
+
+        porcentagem_acerto = (qtd_acertos / questions_qtd*100);
+        console.log(porcentagem_acerto);
+    }
+    
 }
 
 
