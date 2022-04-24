@@ -2,6 +2,10 @@
 //Variavies globais
 
 let id_quizz; // APENAS O NUMERO
+let questions_qtd;
+let qtd_acertos = 0;
+let porcentagem_acerto; 
+
 const REGEX_URL_IMG = "^((http)|(https)|(ftp)):\/\/+(.)+(?:jpg|gif|png|jpeg)$";
 const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
 
@@ -45,7 +49,6 @@ function renderizarQuizzesServer(){
                                     </div>`
 
         }
-
     } // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
     const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
     promiseGet.then(quizzes);
@@ -72,7 +75,7 @@ function paginaQuizz (elemento) {
                                 <h1></h1>
                             </nav>
                             <main>
-
+                                
                             </main>
                             
                             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -86,10 +89,11 @@ function paginaQuizz (elemento) {
         document.querySelector(".capa img").src = dados.image;
         document.querySelector(".capa h1").innerHTML = dados.title;
 
-        let questions_list = dados.questions.length;
+        questions_qtd = dados.questions.length;
 
-        for (i = 0; i < questions_list; i++){
-            document.querySelector("main").innerHTML += `<div id="container${i}" class="container">
+
+        for (i = 0; i < questions_qtd; i++){
+            document.querySelector("main").innerHTML += `<div id="container${i}" class="container notscroll">
                                                             <div  class="titulo-pergunta">
                                                                 <h1>${dados.questions[i].title}</h1>
                                                             </div>
@@ -112,25 +116,55 @@ function paginaQuizz (elemento) {
                                                                         <h2>${resposta.text}</h2>
                                                                     </div>`
             });
-        }                                             
+        }
+                                                    
     }
     const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${elemento.id}`);
     promiseGet.then(quizzes);
 }
 
 function quizzClicado(el){
-    el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
-    el.style.zIndex = "1";
 
-    let respostas_falsas = el.parentNode.querySelectorAll(".false");
-    for (i = 0; i < respostas_falsas.length; i++){
-
-
-        respostas_falsas[i].style.color="#FF4B4B";
+    // adiciona +1 a cada acerto
+    if (el.classList.contains("true")){
+        qtd_acertos+=1;
+        console.log(qtd_acertos)
     }
+    
+    //estilo do clique
+    function estiloPerguntas () {
+        el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
+        el.style.zIndex = "1";
+        
 
-    el.parentNode.querySelector(".true").querySelector("h2").style.color = "#009C22";
+        let respostas_falsas = el.parentNode.querySelectorAll(".false");
+        for (i = 0; i < respostas_falsas.length; i++){
+
+            respostas_falsas[i].style.color="#FF4B4B";
+        }
+
+        el.parentNode.querySelector(".true").querySelector("h2").style.color = "#009C22";
+        el.parentNode.parentNode.classList.remove("notscroll");
+    } estiloPerguntas();
+
+    //scroll pra proxima pergunta
+    let proximaPergunta = () => {
+        document.querySelector(".notscroll").scrollIntoView();
+    }
+    setTimeout(proximaPergunta,2000);
+
+    //tratamento das repostas
+    if (document.querySelectorAll(".branco").length === questions_qtd){
+        alert("Quizz finalizado!");
+
+        porcentagem_acerto = (qtd_acertos / questions_qtd*100);
+        console.log(porcentagem_acerto);
+    }
+    
 }
+
+
+
 
 //Renderizar form do quizz
 function renderFormQuizz(){
