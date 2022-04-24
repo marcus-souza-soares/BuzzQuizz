@@ -366,6 +366,7 @@ function enviarQuizz(obj){
         let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
         if(!!quizzesCriados){
             quizzesCriados.quizzes.push(resp.data);
+            sucessoQuizz(resp.data);
         }else{
             localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data]}));
         }
@@ -374,6 +375,28 @@ function enviarQuizz(obj){
 
     promisse.catch(resp => console.log(resp));
 }
+
+function sucessoQuizz(obj){
+
+    const container = document.querySelector(".principal");
+
+    const quizz = `<div id=${obj.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${obj.image}')" onclick="paginaQuizz(this)">
+                                    
+                                        <div class="titulo">
+                                            <h2>${obj.title}</h2>
+                                        </div>
+                                    </div>`;
+
+    container.innerHTML = `  <div class="container-sucess-quizz">
+                                <h2>Seu quizz está pronto!</h2>
+                                ${quizz}
+                                <button>Acessar Quizz</button>
+                                <a href="">Voltar pra home</a>
+                            </div>`;
+    
+
+}
+
 
 function anexarEventos(){
     document.querySelector(".make-quizz").addEventListener("click", function (evnt){
