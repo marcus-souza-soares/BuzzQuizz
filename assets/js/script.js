@@ -134,6 +134,7 @@ function quizzClicado(el){
 
 //Renderizar form do quizz
 function renderFormQuizz(){
+    console.log("entrei no form do quizz");
     const container = document.querySelector(".principal");
     container.innerHTML = ` <form class="form-quizz-stt" onsubmit="event.preventDefault()">
                                 <div>
@@ -324,15 +325,29 @@ function enviarQuizz(obj){
 
     console.log(obj);
 
-    const promisse = axios.post('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
+    const promisse = axios.post('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes', obj);
 
     promisse.then(resp => {
-        console.log("salvou");
         console.log(resp);
+        let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
+        if(!!quizzesCriados){
+            quizzesCriados.quizzes.push(resp.data);
+        }else{
+            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data]}));
+        }
+
     });
 
     promisse.catch(resp => console.log(resp));
 }
+
+function anexarEventos(){
+    document.querySelector(".make-quizz").addEventListener("click", function (evnt){
+        renderFormQuizz();
+    });
+}
+
+anexarEventos();
 
    
    
