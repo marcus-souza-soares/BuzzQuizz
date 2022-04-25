@@ -13,6 +13,8 @@ html {
 body {
     background-color: #FAFAFA;
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: columms;
 }
 
 a{
