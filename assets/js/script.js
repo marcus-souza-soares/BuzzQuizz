@@ -174,19 +174,27 @@ function quizzClicado(el){
                                                                 </div>
                                                                 <div>
                                                                     <div><img src="${levels[i].image}"></div>
-                                                                    <div><p>${levels[i].text}</p></div>
+                                                                    <div class="texto"><p>${levels[i].text}</p></div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="final-links">
+                                                                <button class="reset-quiz">Reiniciar Quiz</button>
+                                                                <h2>Voltar para home</h2>      
                                                             </div>`
-                proximaPergunta();
+                        proximaPergunta();
                 return;
             }
            
         }
-    } 
-    levels = [];
-    porcentagem_acerto = 0;
-    questions_qtd = 0;
-    qtd_acertos = 0;
+        levels = [];
+        porcentagem_acerto = 0;
+        questions_qtd = 0;
+        qtd_acertos = 0;
+
+        //document.querySelector("main").innerHTML += ``
+    }   
+
+    
 }
 
 

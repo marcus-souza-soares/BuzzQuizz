@@ -267,6 +267,8 @@ body{
     font-style: normal;
     font-weight: 700;
     font-size: 23px;
+    flex-wrap: wrap;
+    overflow: hidden;
 }
 .resultado > div:nth-child(2) {
     display: flex;
@@ -277,6 +279,7 @@ body{
     font-style: normal;
     font-weight: 700;
     font-size: 19px;
+    line-height: 25px;
 }
 .resultado > div:nth-child(2) > div:first-child{
     margin-right: 20px;
@@ -285,8 +288,43 @@ body{
 
 .resultado img {
     width: 100%;
+    height: 100%;
 }
-
+.texto {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+.final-links{
+    width:max-content;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.reset-quiz {
+    margin-bottom: 30px;
+    background-color: #EC362D;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 21px;
+    width: 260px;
+    height: 52px;
+    border-radius: 20px;
+    color: #FFFFFF;
+    border: none;
+}
+.final-links h2 {
+    margin-bottom: 40px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 21px;
+    color: #818181;
+}
 /* -------------- Form do quizz -------------------- */
 
 .form-quizz-stt {
