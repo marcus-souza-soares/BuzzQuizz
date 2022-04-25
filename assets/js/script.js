@@ -206,33 +206,50 @@ function renderFormPergs(el){
 
    let perguntas = [];
 
-   for(let i = 0; i < numPergs; i++){ 
+   for(let i = 0; i < numPergs; i++){
+
+        let visibPerg,visibCard  = "";
+
+        if(i>0){
+            visibPerg = "oculto";
+        }else{
+            visibCard = "oculto";
+        }
 
         perguntas.push(`<div class="form-pergunta">
-                            <div class="pergunta">
-                                <h3>Pergunta tal</h3>
-                                <input type="text" class="titulo" minlength="20" placeholder="Texto da pergunta" required>
-                                <input type="text"class="cor" pattern="${REGEX_HEXA_COLOR}" placeholder="Cor de fundo da pergunta" required>
+                            <div id="${visibPerg}">
+                                <div class="pergunta">
+                                    <h3>Pergunta ${i+1}</h3>
+                                    <input type="text" class="titulo" minlength="20" placeholder="Texto da pergunta" required>
+                                    <input type="text"class="cor" pattern="${REGEX_HEXA_COLOR}" placeholder="Cor de fundo da pergunta" required>
+                                </div>
+                                <div class="resposta correta">
+                                    <h3>Resposta correta</h3>
+                                    <input type="text" class="texto" placeholder="Resposta correta" required>
+                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem">
+                                </div>
+                                <div class="resposta incorreta">
+                                    <h3>Respostas incorretas</h3>
+                                    <div class="incorreta um">
+                                        <input type="text" class="texto" placeholder="Resposta incorreta 1" required>
+                                        <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 1">
+                                    </div>
+                                    <div class="incorreta dois">
+                                        <input type="text" class="texto" placeholder="Resposta incorreta 2">
+                                        <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 2">
+                                    </div>
+                                    <div class="incorreta tres">
+                                        <input type="text" class="texto" placeholder="Resposta incorreta 3">
+                                        <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 3">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="resposta correta">
-                                <h3>Resposta correta</h3>
-                                <input type="text" class="texto" placeholder="Resposta correta" required>
-                                <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem">
-                            </div>
-                            <div class="resposta incorreta">
-                                <h3>Respostas incorretas</h3>
-                                <div class="incorreta-um">
-                                    <input type="text" class="texto" placeholder="Resposta incorreta 1" required>
-                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 1">
-                                </div>
-                                <div class="incorreta-dois">
-                                    <input type="text" class="texto" placeholder="Resposta incorreta 2">
-                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 2">
-                                </div>
-                                <div class="incorreta-tres">
-                                    <input type="text" class="texto" placeholder="Resposta incorreta 3">
-                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 3">
-                                </div>
+                            
+                            <div class="card" id="${visibCard}">
+                                <h3>Pergunta ${i+1}</h3>
+                                <a onclick=alterarVisibilidade(this.parentNode.parentNode.firstElementChild)>
+                                    <img src="./assets/img/edit-btn.svg" alt="">
+                                </a>
                             </div>
                         </div>`);
     };
@@ -240,6 +257,7 @@ function renderFormPergs(el){
     const container = document.querySelector(".principal");
 
     container.innerHTML =  ` <form class="form-quizz-pergs" onsubmit="event.preventDefault()">
+                                <h2>Crie suas perguntas</h2>
                                 <div>
                                 ${perguntas.map(item => item)}
                                 </div>
@@ -260,18 +278,18 @@ function renderFormNiveis(el, numNiveis){
     perguntas.map(
         item => {
             let pergunta = {
-                title: item.children[0].children[1].value,
-                color: item.children[0].children[2].value,
+                title: item.firstElementChild.children[0].children[1].value,
+                color: item.firstElementChild.children[0].children[2].value,
                 answers: [
                     {
-                        text: item.children[1].children[1].value,
-                        image: item.children[1].children[2].value,
+                        text: item.firstElementChild.children[1].children[1].value,
+                        image: item.firstElementChild.children[1].children[2].value,
 						isCorrectAnswer: true
                     }
                 ]
             }
 
-            const respIncorr = [...item.children[2].children];
+            const respIncorr = [...item.firstElementChild.children[2].children];
 
             respIncorr.map(
                 resp => {
@@ -302,14 +320,31 @@ function renderFormNiveis(el, numNiveis){
     let niveis = [];
 
     for(let i = 0; i < numNiveis; i++){
+        
+        let visibPerg,visibCard  = "";
+
+        if(i>0){
+            visibPerg = "oculto";
+        }else{
+            visibCard = "oculto";
+        }
+
         niveis.push(
             `<div class="form-nivel">
-                <h3>Nível tal</h3>
-                <div class="nivel">
-                    <input type="text" minlength="10" placeholder="Título do nível" required>
-                    <input type="number" min="0" max="100" placeholder="% de acerto mínima" required>
-                    <input type="url" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem do nível" required>
-                    <input type="text" minlength="30" placeholder="Descrição do nível" required>
+                <div id="${visibPerg}">
+                    <h3>Nível ${i+1}</h3>
+                    <div class="nivel">
+                        <input type="text" minlength="10" placeholder="Título do nível" required>
+                        <input type="number" min="0" max="100" placeholder="% de acerto mínima" required>
+                        <input type="url" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem do nível" required>
+                        <input type="text" minlength="30" placeholder="Descrição do nível" required>
+                    </div>
+                </div>
+                <div class="card" id="${visibCard}">
+                    <h3>Nível ${i+1}</h3>
+                    <a onclick=alterarVisibilidade(this.parentNode.parentNode.firstElementChild)>
+                        <img src="./assets/img/edit-btn.svg" alt="">
+                    </a>
                 </div>
             </div>`);
     }
@@ -317,9 +352,12 @@ function renderFormNiveis(el, numNiveis){
     const container = document.querySelector(".principal");
 
     container.innerHTML =  ` <form class="form-quizz-niveis" onsubmit="event.preventDefault()">
-                                ${niveis.map(item => item)}
+                                <h2>Agora, decida os níveis</h2>
                                 <div>
-                                    <button class="form-quizz-btn" onclick="salvarQuizz(this.parentNode.parentNode)">Prosseguir pra criar níveis</button>
+                                ${niveis.map(item => item)}
+                                </div>
+                                <div>
+                                    <button class="form-quizz-btn" onclick="salvarQuizz(this.parentNode.parentNode)">Finalizar Quizz</button>
                                 </div>
                             </form>`;
 
@@ -334,10 +372,10 @@ function salvarQuizz(el){
     niveis.map(
         item => {
             let nivel = {
-                title: item.children[1].children[0].value,
-				image: item.children[1].children[2].value,
-				text: item.children[1].children[3].value,
-				minValue: item.children[1].children[1].value
+                title: item.firstElementChild.children[1].children[0].value,
+				image: item.firstElementChild.children[1].children[2].value,
+				text: item.firstElementChild.children[1].children[3].value,
+				minValue: item.firstElementChild.children[1].children[1].value
             }
 
             dadosNiveis.push(nivel);
@@ -390,11 +428,17 @@ function sucessoQuizz(obj){
     container.innerHTML = `  <div class="container-sucess-quizz">
                                 <h2>Seu quizz está pronto!</h2>
                                 ${quizz}
-                                <button>Acessar Quizz</button>
-                                <a href="">Voltar pra home</a>
+                                <button onclick="paginaQuizz(this.previousElementSibling)">Acessar Quizz</button>
+                                <a href="#" onclick="renderizarQuizzesServer()">Voltar pra home</a>
                             </div>`;
     
 
+}
+
+function alterarVisibilidade(el){
+    console.log(el);
+    el.removeAttribute("id");
+    el.nextElementSibling.setAttribute("id", "oculto");
 }
 
 
