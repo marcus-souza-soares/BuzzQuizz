@@ -13,9 +13,6 @@ html {
 body {
     background-color: #FAFAFA;
     font-family: 'Roboto', sans-serif;
-    display: flex;
-    flex-direction: columm;
-    align-items: center;
 }
 
 a{
