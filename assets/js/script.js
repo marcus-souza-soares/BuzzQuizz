@@ -42,7 +42,7 @@ function renderizarQuizzesServer(){
         const dados = obj.data;
 
         for (i = 0; i < dados.length; i++){
-            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this)">
+            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this.id)">
                                     
                                         <div class="titulo">
                                             <h2>${dados[i].title}</h2>
@@ -61,10 +61,10 @@ renderizarQuizzesServer();
 
 // Parte do código de abrir um quiz - do usuario ou do sever
 
-function paginaQuizz (elemento) {
+function paginaQuizz (id) {
 
-    id_quizz = elemento.id;
-    console.log(id_quizz);
+    id_quizz = id;
+    console.log(id);
     //@LIMPAR A PÁGINA@
     const container = document.querySelector("body");
     container.innerHTML = `<header>
@@ -120,7 +120,7 @@ function paginaQuizz (elemento) {
         }
                                                     
     }
-    const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${elemento.id}`);
+    const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id_quizz}`);
     promiseGet.then(quizzes);
 }
 
@@ -178,26 +178,19 @@ function quizzClicado(el){
                                                                 </div>
                                                             </div>
                                                             <div class="final-links">
-                                                                <button class="reset-quiz">Reiniciar Quiz</button>
-                                                                <h2>Voltar para home</h2>      
+                                                                <button class="reset-quiz" onclick="paginaQuizz(id_quizz)">Reiniciar Quiz</button>
+                                                                <h2 onclick="renderizarQuizzesServer()">Voltar para home</h2>      
                                                             </div>`
                         proximaPergunta();
+                        levels = [];
+                        porcentagem_acerto = 0;
+                        questions_qtd = 0;
+                        qtd_acertos = 0;
                 return;
             }
-           
         }
-        levels = [];
-        porcentagem_acerto = 0;
-        questions_qtd = 0;
-        qtd_acertos = 0;
-
-        //document.querySelector("main").innerHTML += ``
     }   
-
-    
 }
-
-
 
 
 //Renderizar form do quizz

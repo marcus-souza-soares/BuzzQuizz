@@ -60,7 +60,7 @@ header>h1 {
     align-items: center;
     border: 2px dashed #B9B9B9;
     border-radius: 5px;
-    margin-top: 80px;
+    margin-top: 90px;
 }
 
 .myquizzes p {
@@ -324,6 +324,9 @@ body{
     font-weight: 400;
     font-size: 21px;
     color: #818181;
+}
+.final-links h2:hover{
+    cursor: pointer;
 }
 /* -------------- Form do quizz -------------------- */
 
