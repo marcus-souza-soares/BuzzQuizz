@@ -5,6 +5,7 @@ let id_quizz; // APENAS O NUMERO
 let questions_qtd;
 let qtd_acertos = 0;
 let porcentagem_acerto; 
+let levels;
 
 const REGEX_URL_IMG = "^((http)|(https)|(ftp)):\/\/+(.)+(?:jpg|gif|png|jpeg)$";
 const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
@@ -88,7 +89,7 @@ function paginaQuizz (elemento) {
         //dar um jeito de fazer com que a 
         document.querySelector(".capa img").src = dados.image;
         document.querySelector(".capa h1").innerHTML = dados.title;
-
+        levels = dados.levels;
         questions_qtd = dados.questions.length;
 
 
@@ -149,7 +150,9 @@ function quizzClicado(el){
 
     //scroll pra proxima pergunta
     let proximaPergunta = () => {
-        document.querySelector(".notscroll").scrollIntoView();
+        if (document.querySelector(".notscroll") !== null){
+            document.querySelector(".notscroll").scrollIntoView();
+        }
     }
     setTimeout(proximaPergunta,2000);
 
@@ -157,10 +160,33 @@ function quizzClicado(el){
     if (document.querySelectorAll(".branco").length === questions_qtd){
         alert("Quizz finalizado!");
 
-        porcentagem_acerto = (qtd_acertos / questions_qtd*100);
+        porcentagem_acerto = Math.ceil(qtd_acertos / questions_qtd*100);
         console.log(porcentagem_acerto);
-    }
-    
+
+        levels.sort(function(a, b){return b.minValue-a.minValue});
+
+        for (i = 0; i < levels.length; i++){
+
+            if (porcentagem_acerto >= levels[i].minValue){
+                document.querySelector("main").innerHTML += `<div class="resultado notscroll">
+                                                                <div class="titulo-resultado">
+                                                                    <h1>${porcentagem_acerto}% de acerto: ${levels[i].title}</h1>
+                                                                </div>
+                                                                <div>
+                                                                    <div><img src="${levels[i].image}"></div>
+                                                                    <div><p>${levels[i].text}</p></div>
+                                                                </div>
+                                                            </div>`
+                proximaPergunta();
+                return;
+            }
+           
+        }
+    } 
+    levels = [];
+    porcentagem_acerto = 0;
+    questions_qtd = 0;
+    qtd_acertos = 0;
 }
 
 
