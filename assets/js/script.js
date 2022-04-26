@@ -158,7 +158,6 @@ function quizzClicado(el){
 
     //tratamento das repostas
     if (document.querySelectorAll(".branco").length === questions_qtd){
-        alert("Quizz finalizado!");
 
         porcentagem_acerto = Math.ceil(qtd_acertos / questions_qtd*100);
         console.log(porcentagem_acerto);
@@ -208,7 +207,7 @@ function renderFormQuizz(){
                                     </div>
                                 </div>
                                 <div>
-                                    <button class="form-quizz-btn" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
+                                    <button class="form-quizz-btn" type="button" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
                                 </div>
                             </form>`;
 
@@ -218,11 +217,12 @@ function renderFormQuizz(){
 
 //Renderizar perguntas do quizz
 function renderFormPergs(el){
- 
+    
    const titulo = el.querySelector(".titulo").value;
    const imagem = el.querySelector(".imagem").value;
    const numPergs = parseInt(el.querySelector(".num-pergs").value);
    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
+
 
   localStorage.setItem("quizz", JSON.stringify({
       title: titulo,
@@ -456,8 +456,6 @@ function sucessoQuizz(obj){
                                 <button onclick="paginaQuizz(this.previousElementSibling)">Acessar Quizz</button>
                                 <a href="#" onclick="renderizarQuizzesServer()">Voltar pra home</a>
                             </div>`;
-    
-
 }
 
 function alterarVisibilidade(el){
