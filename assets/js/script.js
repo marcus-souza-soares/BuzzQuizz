@@ -18,12 +18,14 @@ function renderizarQuizzesServer(){
                                                     </header>
                                                     <div class="principal">
                                                         <div class="myquizzes">
-                                                            <p>
-                                                                Você não criou nenhum <br>quizz ainda :(
-                                                            </p>
-                                                            <button class="make-quizz" onclick="renderFormQuizz()">
-                                                                Criar Quizz
-                                                            </button>
+                                                            <div class="first">
+                                                                <p>
+                                                                    Você não criou nenhum <br>quizz ainda :(
+                                                                </p>
+                                                                <button class="make-quizz" onclick="renderFormQuizz()">
+                                                                    Criar Quizz
+                                                                </button>
+                                                            </div>
                                                         </div>
 
                                                         <nav>
@@ -37,11 +39,51 @@ function renderizarQuizzesServer(){
                                                     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
                                                     <script src="assets/js/script.js"></script>   `
 
+    const myquizzes = document.querySelector(".myquizzes");
+
+    const quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
+
+
+    if(!!quizzesCriados && quizzesCriados.quizzes.length > 0){
+        myquizzes.innerHTML =  `<div class="second">  
+                                <div>          
+                                    <span>
+                                        Seus Quizzes
+                                    </span>
+                                    <button class="make-quizz" onclick="renderFormQuizz()">
+                                        +
+                                    </button>
+                                </div>
+                                <div class="userQuizzes">
+                                    
+                                </div>
+                            </div>`;
+
+         userQuizzes = document.querySelector(".userQuizzes");
+
+        for(item of quizzesCriados.quizzes){
+        
+            userQuizzes.innerHTML +=  `<div id=${item.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${item.image}')" onclick="paginaQuizz(this.id)">
+                                                    
+                                        <div class="titulo">
+                                            <h2>${item.title}</h2>
+                                        </div>
+                                    </div>`;
+        }
+    }
+
+    
+
+    
+    
     const container = document.querySelector(".quizzes");
+   
     const quizzes = (obj) => {
         const dados = obj.data;
 
         for (i = 0; i < dados.length; i++){
+
+            
             container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this.id)">
                                     
                                         <div class="titulo">
@@ -452,7 +494,9 @@ function enviarQuizz(obj) {
 
         let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
         if (!!quizzesCriados) {
-            quizzesCriados.quizzes.push(resp.data);
+            quizzesCriados = quizzesCriados.quizzes;
+            quizzesCriados.push(resp.data);
+            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: quizzesCriados }));
             sucessoQuizz(resp.data);
         } else {
             localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data] }));
