@@ -207,18 +207,13 @@ function renderFormQuizz() {
                                     </div>
                                 </div>
                                 <div>
-<<<<<<< HEAD
                                     <button class="form-quizz-btn" type="button" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
-=======
-                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar perguntas</button>
->>>>>>> 35166e6a594054dc9b844030790b71fbc4d2ad9b
                                 </div>
                             </form>`;
     anexarEventos();
 }
 
 //Renderizar perguntas do quizz
-<<<<<<< HEAD
 function renderFormPergs(el){
     
    const titulo = el.querySelector(".titulo").value;
@@ -233,21 +228,6 @@ function renderFormPergs(el){
       questions: [],
       levels: []
   }));
-=======
-function renderFormPergs(el) {
-
-    const titulo = el.querySelector(".titulo").value;
-    const imagem = el.querySelector(".imagem").value;
-    const numPergs = parseInt(el.querySelector(".num-pergs").value);
-    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
-
-    localStorage.setItem("quizz", JSON.stringify({
-        title: titulo,
-        image: imagem,
-        questions: [],
-        levels: numNiveis
-    }));
->>>>>>> 35166e6a594054dc9b844030790b71fbc4d2ad9b
 
     let perguntas = [];
 
@@ -307,7 +287,7 @@ function renderFormPergs(el) {
                                 ${perguntas.map(item => item)}
                                 </div>
                                 <div>
-                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar níveis</button>
+                                    <button type="submit" class="form-quizz-btn" onclick=renderFormNiveis(this, ${numNiveis})>Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
     anexarEventos();
@@ -500,11 +480,6 @@ function sucessoQuizz(obj) {
                                 <button onclick="paginaQuizz(${obj.id})">Acessar Quizz</button>
                                 <a href="#" onclick="window.location.reload()">Voltar pra home</a>
                             </div>`;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 35166e6a594054dc9b844030790b71fbc4d2ad9b
 }
 
 function alterarVisibilidade(el) {
