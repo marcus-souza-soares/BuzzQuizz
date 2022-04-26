@@ -5,14 +5,18 @@
 * {
     box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
+  
 }
 
 /* -------------- pagina inicial ------------- */
 body {
     background-color: #FAFAFA;
     font-family: 'Roboto', sans-serif;
+    margin: 0 auto;
+    max-width: 100%;
 }
 
 a{
@@ -31,7 +35,6 @@ header {
     width: 100%;
     height: 65px;
     z-index: 2;
-
 }
 
 header>h1 {
@@ -95,13 +98,12 @@ header>h1 {
     font-size: 20px;
 }
 
-.principal>nav:nth-child(2) {
+.principal>nav {
     margin-top: 80px;
     width: 1051px;
 }
 
 .quizzes {
-
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -117,19 +119,13 @@ header>h1 {
     height: 181px;
     background-size: 340px 181px;
     border-radius: 5px;
-
-
 }
 
 .quizz:hover {
     cursor: pointer;
 }
 
-.quizz img {
-    border-radius: 5px;
-    width: 340px;
-    height: 181px;
-}
+
 
 .titulo h2 {
     font-family: 'Roboto';
