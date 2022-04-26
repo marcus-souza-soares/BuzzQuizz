@@ -200,7 +200,6 @@ function quizzClicado(el){
 
     //tratamento das repostas
     if (document.querySelectorAll(".branco").length === questions_qtd){
-        alert("Quizz finalizado!");
 
         porcentagem_acerto = Math.ceil(qtd_acertos / questions_qtd*100);
         console.log(porcentagem_acerto);
@@ -250,26 +249,27 @@ function renderFormQuizz() {
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar perguntas</button>
+                                    <button class="form-quizz-btn" type="button" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
                                 </div>
                             </form>`;
     anexarEventos();
 }
 
 //Renderizar perguntas do quizz
-function renderFormPergs(el) {
+function renderFormPergs(el){
+    
+   const titulo = el.querySelector(".titulo").value;
+   const imagem = el.querySelector(".imagem").value;
+   const numPergs = parseInt(el.querySelector(".num-pergs").value);
+   const numNiveis = parseInt(el.querySelector(".num-niveis").value);
 
-    const titulo = el.querySelector(".titulo").value;
-    const imagem = el.querySelector(".imagem").value;
-    const numPergs = parseInt(el.querySelector(".num-pergs").value);
-    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
 
-    localStorage.setItem("quizz", JSON.stringify({
-        title: titulo,
-        image: imagem,
-        questions: [],
-        levels: numNiveis
-    }));
+  localStorage.setItem("quizz", JSON.stringify({
+      title: titulo,
+      image: imagem,
+      questions: [],
+      levels: []
+  }));
 
     let perguntas = [];
 
@@ -329,7 +329,7 @@ function renderFormPergs(el) {
                                 ${perguntas.map(item => item)}
                                 </div>
                                 <div>
-                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar níveis</button>
+                                    <button type="submit" class="form-quizz-btn" onclick=renderFormNiveis(this, ${numNiveis})>Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
     anexarEventos();
@@ -524,8 +524,6 @@ function sucessoQuizz(obj) {
                                 <button onclick="paginaQuizz(${obj.id})">Acessar Quizz</button>
                                 <a href="#" onclick="window.location.reload()">Voltar pra home</a>
                             </div>`;
-
-
 }
 
 function alterarVisibilidade(el) {
