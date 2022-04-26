@@ -194,10 +194,10 @@ function quizzClicado(el){
 
 
 //Renderizar form do quizz
-function renderFormQuizz(){
+function renderFormQuizz() {
     console.log("entrei no form do quizz");
     const container = document.querySelector(".principal");
-    container.innerHTML = ` <form class="form-quizz-stt" onsubmit="event.preventDefault()">
+    container.innerHTML = ` <form class="form-quizz-stt" action="/">
                                 <div>
                                     <h2>Comece pelo começo</h2>
                                     <div class="box-inputs">
@@ -208,58 +208,56 @@ function renderFormQuizz(){
                                     </div>
                                 </div>
                                 <div>
-                                    <button class="form-quizz-btn" onclick="renderFormPergs(this.parentNode.parentNode)">Prosseguir pra criar perguntas</button>
+                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar perguntas</button>
                                 </div>
                             </form>`;
-
-
-    
+    anexarEventos();
 }
 
 //Renderizar perguntas do quizz
-function renderFormPergs(el){
- 
-   const titulo = el.querySelector(".titulo").value;
-   const imagem = el.querySelector(".imagem").value;
-   const numPergs = parseInt(el.querySelector(".num-pergs").value);
-   const numNiveis = parseInt(el.querySelector(".num-niveis").value);
+function renderFormPergs(el) {
 
-  localStorage.setItem("quizz", JSON.stringify({
-      title: titulo,
-      image: imagem,
-      questions: [],
-      levels: []
-  }));
+    const titulo = el.querySelector(".titulo").value;
+    const imagem = el.querySelector(".imagem").value;
+    const numPergs = parseInt(el.querySelector(".num-pergs").value);
+    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
 
-   let perguntas = [];
+    localStorage.setItem("quizz", JSON.stringify({
+        title: titulo,
+        image: imagem,
+        questions: [],
+        levels: numNiveis
+    }));
 
-   for(let i = 0; i < numPergs; i++){
+    let perguntas = [];
 
-        let visibPerg,visibCard  = "";
+    for (let i = 0; i < numPergs; i++) {
 
-        if(i>0){
+        let visibPerg, visibCard = "";
+
+        if (i > 0) {
             visibPerg = "oculto";
-        }else{
+        } else {
             visibCard = "oculto";
         }
 
         perguntas.push(`<div class="form-pergunta">
                             <div id="${visibPerg}">
                                 <div class="pergunta">
-                                    <h3>Pergunta ${i+1}</h3>
+                                    <h3>Pergunta ${i + 1}</h3>
                                     <input type="text" class="titulo" minlength="20" placeholder="Texto da pergunta" required>
                                     <input type="text"class="cor" pattern="${REGEX_HEXA_COLOR}" placeholder="Cor de fundo da pergunta" required>
                                 </div>
                                 <div class="resposta correta">
                                     <h3>Resposta correta</h3>
                                     <input type="text" class="texto" placeholder="Resposta correta" required>
-                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem">
+                                    <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem" required>
                                 </div>
                                 <div class="resposta incorreta">
                                     <h3>Respostas incorretas</h3>
                                     <div class="incorreta um">
                                         <input type="text" class="texto" placeholder="Resposta incorreta 1" required>
-                                        <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 1">
+                                        <input type="url" class="imagem" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem 1" required>
                                     </div>
                                     <div class="incorreta dois">
                                         <input type="text" class="texto" placeholder="Resposta incorreta 2">
@@ -273,31 +271,33 @@ function renderFormPergs(el){
                             </div>
                             
                             <div class="card" id="${visibCard}">
-                                <h3>Pergunta ${i+1}</h3>
+                                <h3>Pergunta ${i + 1}</h3>
                                 <a onclick=alterarVisibilidade(this.parentNode.parentNode.firstElementChild)>
                                     <img src="./assets/img/edit-btn.svg" alt="">
                                 </a>
                             </div>
                         </div>`);
-    };
-    
+    }
+
     const container = document.querySelector(".principal");
 
-    container.innerHTML =  ` <form class="form-quizz-pergs" onsubmit="event.preventDefault()">
+    container.innerHTML = ` <form class="form-quizz-pergs">
                                 <h2>Crie suas perguntas</h2>
                                 <div>
                                 ${perguntas.map(item => item)}
                                 </div>
                                 <div>
-                                    <button class="form-quizz-btn" onclick="renderFormNiveis(this.parentNode.parentNode,${numNiveis})">Prosseguir pra criar níveis</button>
+                                    <button type="submit" class="form-quizz-btn">Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
-
+    anexarEventos();
 }
 
-//Renderizaconsole.log("entrou");r níveis do quizz
-function renderFormNiveis(el, numNiveis){
-    
+//Renderizar niveis do quiz
+function renderFormNiveis(el, numNiveis) {
+
+    let stop = false;
+
     let dadosPerg = [];
 
     const perguntas = [...el.querySelectorAll(".form-pergunta")];
@@ -311,7 +311,7 @@ function renderFormNiveis(el, numNiveis){
                     {
                         text: item.firstElementChild.children[1].children[1].value,
                         image: item.firstElementChild.children[1].children[2].value,
-						isCorrectAnswer: true
+                        isCorrectAnswer: true
                     }
                 ]
             }
@@ -320,24 +320,34 @@ function renderFormNiveis(el, numNiveis){
 
             respIncorr.map(
                 resp => {
-                    if(respIncorr.indexOf(resp) > 0 && !!resp.children[0].value){
-                        pergunta.answers.push(
-                            {
-                                text: resp.children[0].value,
-                                image: resp.children[1].value,
-                                isCorrectAnswer: false 
+
+                    if (respIncorr.indexOf(resp) > 0) {
+
+                        let texto = resp.children[0].value;
+                        let url = resp.children[1].value;
+
+                        if (!!texto && !!url) {
+                            pergunta.answers.push(
+                                {
+                                    text: texto,
+                                    image: url,
+                                    isCorrectAnswer: false
+                                }
+                            );
+                        } else {
+                            if (!!texto || !!url) {
+                                stop = true;
                             }
-                        )
+                        }
                     }
+
                 }
-                
+
             );
 
             dadosPerg.push(pergunta);
         }
     );
-
-    console.log(dadosPerg);
 
     let quizz = JSON.parse(localStorage.getItem("quizz"));
     quizz.questions = dadosPerg;
@@ -346,29 +356,37 @@ function renderFormNiveis(el, numNiveis){
 
     let niveis = [];
 
-    for(let i = 0; i < numNiveis; i++){
-        
-        let visibPerg,visibCard  = "";
+    for (let i = 0; i < numNiveis; i++) {
 
-        if(i>0){
+
+        if (stop) {
+            alert("Cada resposta deve incluir uma url de imagem e vice-versa");
+            break;
+        }
+
+        let visibPerg, visibCard, max = "";
+
+        if (i > 0) {
             visibPerg = "oculto";
-        }else{
+            max = 100;
+        } else {
             visibCard = "oculto";
+            max = 0;
         }
 
         niveis.push(
             `<div class="form-nivel">
                 <div id="${visibPerg}">
-                    <h3>Nível ${i+1}</h3>
+                    <h3>Nível ${i + 1}</h3>
                     <div class="nivel">
                         <input type="text" minlength="10" placeholder="Título do nível" required>
-                        <input type="number" min="0" max="100" placeholder="% de acerto mínima" required>
+                        <input type="number" min="0" max="${max}" placeholder="% de acerto mínima" required>
                         <input type="url" pattern="${REGEX_URL_IMG}" placeholder="URL da imagem do nível" required>
                         <input type="text" minlength="30" placeholder="Descrição do nível" required>
                     </div>
                 </div>
                 <div class="card" id="${visibCard}">
-                    <h3>Nível ${i+1}</h3>
+                    <h3>Nível ${i + 1}</h3>
                     <a onclick=alterarVisibilidade(this.parentNode.parentNode.firstElementChild)>
                         <img src="./assets/img/edit-btn.svg" alt="">
                     </a>
@@ -376,40 +394,45 @@ function renderFormNiveis(el, numNiveis){
             </div>`);
     }
 
-    const container = document.querySelector(".principal");
+    if (!stop) {
 
-    container.innerHTML =  ` <form class="form-quizz-niveis" onsubmit="event.preventDefault()">
-                                <h2>Agora, decida os níveis</h2>
-                                <div>
-                                ${niveis.map(item => item)}
-                                </div>
-                                <div>
-                                    <button class="form-quizz-btn" onclick="salvarQuizz(this.parentNode.parentNode)">Finalizar Quizz</button>
-                                </div>
-                            </form>`;
+        const container = document.querySelector(".principal");
+
+        container.innerHTML = ` <form class="form-quizz-niveis">
+                                    <h2>Agora, decida os níveis</h2>
+                                    <div>
+                                    ${niveis.map(item => item)}
+                                    </div>
+                                    <div>
+                                        <button class="form-quizz-btn">Finalizar Quizz</button>
+                                    </div>
+                                </form>`;
+
+        anexarEventos();
+    }
+
 
 }
 
-function salvarQuizz(el){
+function salvarQuizz(el) {
 
     let dadosNiveis = [];
-    
-    const niveis = [...el.querySelectorAll(".form-nivel")]; 
+
+    const niveis = [...el.querySelectorAll(".form-nivel")];
 
     niveis.map(
         item => {
             let nivel = {
                 title: item.firstElementChild.children[1].children[0].value,
-				image: item.firstElementChild.children[1].children[2].value,
-				text: item.firstElementChild.children[1].children[3].value,
-				minValue: item.firstElementChild.children[1].children[1].value
+                image: item.firstElementChild.children[1].children[2].value,
+                text: item.firstElementChild.children[1].children[3].value,
+                minValue: item.firstElementChild.children[1].children[1].value
             }
 
             dadosNiveis.push(nivel);
         }
     );
 
-    console.log(dadosNiveis);
 
     let quizz = JSON.parse(localStorage.getItem("quizz"));
     quizz.levels = dadosNiveis;
@@ -418,20 +441,21 @@ function salvarQuizz(el){
     enviarQuizz(quizz);
 
 }
-function enviarQuizz(obj){
 
-    console.log(obj);
+
+function enviarQuizz(obj) {
+
 
     const promisse = axios.post('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes', obj);
 
     promisse.then(resp => {
-        console.log(resp);
+
         let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
-        if(!!quizzesCriados){
+        if (!!quizzesCriados) {
             quizzesCriados.quizzes.push(resp.data);
             sucessoQuizz(resp.data);
-        }else{
-            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data]}));
+        } else {
+            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data] }));
         }
 
     });
@@ -439,11 +463,11 @@ function enviarQuizz(obj){
     promisse.catch(resp => console.log(resp));
 }
 
-function sucessoQuizz(obj){
+function sucessoQuizz(obj) {
 
     const container = document.querySelector(".principal");
 
-    const quizz = `<div id=${obj.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${obj.image}')" onclick="paginaQuizz(this)">
+    const quizz = `<div id=${obj.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${obj.image}')" onclick="paginaQuizz(${obj.id})">
                                     
                                         <div class="titulo">
                                             <h2>${obj.title}</h2>
@@ -453,25 +477,60 @@ function sucessoQuizz(obj){
     container.innerHTML = `  <div class="container-sucess-quizz">
                                 <h2>Seu quizz está pronto!</h2>
                                 ${quizz}
-                                <button onclick="paginaQuizz(this.previousElementSibling)">Acessar Quizz</button>
-                                <a href="#" onclick="renderizarQuizzesServer()">Voltar pra home</a>
+                                <button onclick="paginaQuizz(${obj.id})">Acessar Quizz</button>
+                                <a href="#" onclick="window.location.reload()">Voltar pra home</a>
                             </div>`;
-    
+
 
 }
 
-function alterarVisibilidade(el){
-    console.log(el);
+function alterarVisibilidade(el) {
     el.removeAttribute("id");
     el.nextElementSibling.setAttribute("id", "oculto");
 }
 
-anexarEventos();
-// OBSERVAÇÃO, O BOTÃO DE CRIAR QUIZZ NÃO FUNCIONA APÓS CLICAR EM VOLTAR PARA HOME NA PAGINA DO QUIZZ
-// QUALQUER COISA, TIRA O EVENTLISTEN
 
-   //obs: resolvido
-   
+function anexarEventos() {
+
+    const criarQuizz = document.querySelector(".make-quizz");
+    if (!!criarQuizz) {
+        criarQuizz.addEventListener("click", (event) => {
+            renderFormQuizz();
+        });
+    }
+
+
+    const formQuizz = document.querySelector(".form-quizz-stt");
+    if (!!formQuizz) {
+        formQuizz.addEventListener('submit', (event) => {
+            event.preventDefault();
+            renderFormPergs(formQuizz);
+        });
+    }
+
+    const formPergs = document.querySelector(".form-quizz-pergs");
+    if (!!formPergs) {
+        formPergs.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const quizz = JSON.parse(localStorage.getItem("quizz"));
+            renderFormNiveis(formPergs, parseInt(quizz.levels));
+        });
+    }
+
+    const formNiveis = document.querySelector(".form-quizz-niveis");
+    if (!!formNiveis) {
+        formNiveis.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const quizz = JSON.parse(localStorage.getItem("quizz"));
+            salvarQuizz(formNiveis);
+        });
+    }
+
+}
+
+anexarEventos();
+
+
    
    
 
