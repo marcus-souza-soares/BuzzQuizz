@@ -21,7 +21,7 @@ function renderizarQuizzesServer(){
                                                             <p>
                                                                 Você não criou nenhum <br>quizz ainda :(
                                                             </p>
-                                                            <button class="make-quizz">
+                                                            <button class="make-quizz" onclick="renderFormQuizz()">
                                                                 Criar Quizz
                                                             </button>
                                                         </div>
@@ -418,8 +418,6 @@ function salvarQuizz(el){
     enviarQuizz(quizz);
 
 }
-
-
 function enviarQuizz(obj){
 
     console.log(obj);
@@ -468,16 +466,11 @@ function alterarVisibilidade(el){
     el.nextElementSibling.setAttribute("id", "oculto");
 }
 
-
-function anexarEventos(){
-    document.querySelector(".make-quizz").addEventListener("click", function (evnt){
-        renderFormQuizz();
-    });
-}
-
 anexarEventos();
+// OBSERVAÇÃO, O BOTÃO DE CRIAR QUIZZ NÃO FUNCIONA APÓS CLICAR EM VOLTAR PARA HOME NA PAGINA DO QUIZZ
+// QUALQUER COISA, TIRA O EVENTLISTEN
 
-   
+   //obs: resolvido
    
    
    
