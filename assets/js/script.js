@@ -1,4 +1,3 @@
-
 //Variavies globais
 
 let id_quizz; // APENAS O NUMERO
@@ -7,13 +6,11 @@ let qtd_acertos = 0;
 let porcentagem_acerto;
 let levels;
 
-const REGEX_URL_IMG = "^((http)|(https)|(ftp)):\/\/+(.)+(?:jpg|gif|png|jpeg)$";
+const REGEX_URL_IMG = "^((http)|(https)|(ftp))://+(.)+(?:jpg|gif|png|jpeg)$";
 const REGEX_HEXA_COLOR = "^#([A-Fa-f0-9]{6})$";
 
-
 function renderizarQuizzesServer() {
-
-    document.querySelector("body").innerHTML = `    <header>
+  document.querySelector("body").innerHTML = `    <header>
                                                         <h1>BuzzQuizz</h1>
                                                     </header>
                                                     <div class="principal">
@@ -37,15 +34,14 @@ function renderizarQuizzesServer() {
                                                         </nav>
                                                     </div>
                                                     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-                                                    <script src="assets/js/script.js"></script>   `
+                                                    <script src="assets/js/script.js"></script>   `;
 
-    const myquizzes = document.querySelector(".myquizzes");
+  const myquizzes = document.querySelector(".myquizzes");
 
-    const quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
+  const quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
 
-
-    if (!!quizzesCriados && quizzesCriados.quizzes.length > 0) {
-        myquizzes.innerHTML = `<div class="second">  
+  if (!!quizzesCriados && quizzesCriados.quizzes.length > 0) {
+    myquizzes.innerHTML = `<div class="second">  
                                 <div>          
                                     <span>
                                         Seus Quizzes
@@ -59,57 +55,47 @@ function renderizarQuizzesServer() {
                                 </div>
                             </div>`;
 
-        userQuizzes = document.querySelector(".userQuizzes");
+    userQuizzes = document.querySelector(".userQuizzes");
 
-        for (item of quizzesCriados.quizzes) {
-
-            userQuizzes.innerHTML += `<div id=${item.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${item.image}')" onclick="paginaQuizz(this.id)">
+    for (item of quizzesCriados.quizzes) {
+      userQuizzes.innerHTML += `<div id=${item.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${item.image}')" onclick="paginaQuizz(this.id)">
                                                     
                                         <div class="titulo">
                                             <h2>${item.title}</h2>
                                         </div>
                                     </div>`;
-        }
     }
+  }
 
+  const container = document.querySelector(".quizzes");
 
+  const quizzes = (obj) => {
+    const dados = obj.data;
 
-
-
-    const container = document.querySelector(".quizzes");
-
-    const quizzes = (obj) => {
-        const dados = obj.data;
-
-        for (i = 0; i < dados.length; i++) {
-
-
-            container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this.id)">
+    for (i = 0; i < dados.length; i++) {
+      container.innerHTML += `<div id=${dados[i].id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${dados[i].image}')" onclick="paginaQuizz(this.id)">
                                     
                                         <div class="titulo">
                                             <h2>${dados[i].title}</h2>
                                         </div>
-                                    </div>`
-
-        }
-    } // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
-    const promiseGet = axios.get('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes');
-    promiseGet.then(quizzes);
+                                    </div>`;
+    }
+  }; // COLOQUEI A VERSÃO DA TURMA 4 APENAS PARA VER COMO FICARIA
+  const promiseGet = axios.get(
+    "https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes"
+  );
+  promiseGet.then(quizzes);
 }
 renderizarQuizzesServer();
-
-
-
 
 // Parte do código de abrir um quiz - do usuario ou do sever
 
 function paginaQuizz(id) {
-
-    id_quizz = id;
-    console.log(id);
-    //@LIMPAR A PÁGINA@
-    const container = document.querySelector("body");
-    container.innerHTML = `<header>
+  id_quizz = id;
+  console.log(id);
+  //@LIMPAR A PÁGINA@
+  const container = document.querySelector("body");
+  container.innerHTML = `<header>
                                 <h1>BuzzQuizz</h1>
                             </header>
                             <nav class="capa">
@@ -122,21 +108,21 @@ function paginaQuizz(id) {
                             </main>
                             
                             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-                            <script src="assets/js/script.js"></script> `
+                            <script src="assets/js/script.js"></script> `;
 
-    const quizzes = (obj) => {
+  const quizzes = (obj) => {
+    const dados = obj.data;
+    console.log(dados);
+    //dar um jeito de fazer com que a
+    document.querySelector(".capa img").src = dados.image;
+    document.querySelector(".capa h1").innerHTML = dados.title;
+    levels = dados.levels;
+    questions_qtd = dados.questions.length;
 
-        const dados = obj.data;
-        console.log(dados)
-        //dar um jeito de fazer com que a 
-        document.querySelector(".capa img").src = dados.image;
-        document.querySelector(".capa h1").innerHTML = dados.title;
-        levels = dados.levels;
-        questions_qtd = dados.questions.length;
-
-
-        for (i = 0; i < questions_qtd; i++) {
-            document.querySelector("main").innerHTML += `<div id="container${i}" class="container notscroll">
+    for (i = 0; i < questions_qtd; i++) {
+      document.querySelector(
+        "main"
+      ).innerHTML += `<div id="container${i}" class="container notscroll">
                                                             <div  class="titulo-pergunta">
                                                                 <h1>${dados.questions[i].title}</h1>
                                                             </div>
@@ -144,72 +130,80 @@ function paginaQuizz(id) {
 
                                                             </div>
                                                             <div></div>
-                                                        </div>`
-            document.querySelector(`#container${i} .titulo-pergunta`).style.backgroundColor = dados.questions[i].color;
+                                                        </div>`;
+      document.querySelector(
+        `#container${i} .titulo-pergunta`
+      ).style.backgroundColor = dados.questions[i].color;
 
-            //embaralhamento das respostas
-            let sorted_answes = dados.questions[i].answers.sort(comparador);
-            function comparador() {
-                return Math.random() - 0.5;
-            }
+      //embaralhamento das respostas
+      let sorted_answes = dados.questions[i].answers.sort(comparador);
+      function comparador() {
+        return Math.random() - 0.5;
+      }
 
-            const renderAlternativas = sorted_answes.map(function (resposta) {
-                document.querySelector(`#pergunta${i}`).innerHTML += `<div class="${resposta.isCorrectAnswer}" onclick="quizzClicado(this)">
+      const renderAlternativas = sorted_answes.map(function (resposta) {
+        document.querySelector(
+          `#pergunta${i}`
+        ).innerHTML += `<div class="${resposta.isCorrectAnswer}" onclick="quizzClicado(this)">
                                                                         <img src="${resposta.image}">
                                                                         <h2>${resposta.text}</h2>
-                                                                    </div>`
-            });
-        }
-
+                                                                    </div>`;
+      });
     }
-    const promiseGet = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id_quizz}`);
-    promiseGet.then(quizzes);
+  };
+  const promiseGet = axios.get(
+    `https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id_quizz}`
+  );
+  promiseGet.then(quizzes);
 }
 
 function quizzClicado(el) {
+  // adiciona +1 a cada acerto
+  if (el.classList.contains("true")) {
+    qtd_acertos += 1;
+    console.log(qtd_acertos);
+  }
 
-    // adiciona +1 a cada acerto
-    if (el.classList.contains("true")) {
-        qtd_acertos += 1;
-        console.log(qtd_acertos)
+  //estilo do clique
+  function estiloPerguntas() {
+    el.parentNode.parentNode
+      .querySelector(".container > div:nth-child(3)")
+      .classList.add("branco");
+    el.style.zIndex = "1";
+
+    let respostas_falsas = el.parentNode.querySelectorAll(".false");
+    for (i = 0; i < respostas_falsas.length; i++) {
+      respostas_falsas[i].style.color = "#FF4B4B";
     }
 
-    //estilo do clique
-    function estiloPerguntas() {
-        el.parentNode.parentNode.querySelector(".container > div:nth-child(3)").classList.add("branco");
-        el.style.zIndex = "1";
+    el.parentNode.querySelector(".true").querySelector("h2").style.color =
+      "#009C22";
+    el.parentNode.parentNode.classList.remove("notscroll");
+  }
+  estiloPerguntas();
 
-
-        let respostas_falsas = el.parentNode.querySelectorAll(".false");
-        for (i = 0; i < respostas_falsas.length; i++) {
-
-            respostas_falsas[i].style.color = "#FF4B4B";
-        }
-
-        el.parentNode.querySelector(".true").querySelector("h2").style.color = "#009C22";
-        el.parentNode.parentNode.classList.remove("notscroll");
-    } estiloPerguntas();
-
-    //scroll pra proxima pergunta
-    let proximaPergunta = () => {
-        if (document.querySelector(".notscroll") !== null) {
-            document.querySelector(".notscroll").scrollIntoView();
-        }
+  //scroll pra proxima pergunta
+  let proximaPergunta = () => {
+    if (document.querySelector(".notscroll") !== null) {
+      document.querySelector(".notscroll").scrollIntoView();
     }
-    setTimeout(proximaPergunta, 2000);
+  };
+  setTimeout(proximaPergunta, 2000);
 
-    //tratamento das repostas
-    if (document.querySelectorAll(".branco").length === questions_qtd) {
+  //tratamento das repostas
+  if (document.querySelectorAll(".branco").length === questions_qtd) {
+    porcentagem_acerto = Math.ceil((qtd_acertos / questions_qtd) * 100);
+    console.log(porcentagem_acerto);
 
-        porcentagem_acerto = Math.ceil(qtd_acertos / questions_qtd * 100);
-        console.log(porcentagem_acerto);
+    levels.sort(function (a, b) {
+      return b.minValue - a.minValue;
+    });
 
-        levels.sort(function (a, b) { return b.minValue - a.minValue });
-
-        for (i = 0; i < levels.length; i++) {
-
-            if (porcentagem_acerto >= levels[i].minValue) {
-                document.querySelector("main").innerHTML += `<div class="resultado notscroll">
+    for (i = 0; i < levels.length; i++) {
+      if (porcentagem_acerto >= levels[i].minValue) {
+        document.querySelector(
+          "main"
+        ).innerHTML += `<div class="resultado notscroll">
                                                                 <div class="titulo-resultado">
                                                                     <h1>${porcentagem_acerto}% de acerto: ${levels[i].title}</h1>
                                                                 </div>
@@ -221,24 +215,23 @@ function quizzClicado(el) {
                                                             <div class="final-links">
                                                                 <button class="reset-quiz" onclick="paginaQuizz(id_quizz)">Reiniciar Quiz</button>
                                                                 <h2 onclick="renderizarQuizzesServer()">Voltar para home</h2>      
-                                                            </div>`
-                proximaPergunta();
-                levels = [];
-                porcentagem_acerto = 0;
-                questions_qtd = 0;
-                qtd_acertos = 0;
-                return;
-            }
-        }
+                                                            </div>`;
+        proximaPergunta();
+        levels = [];
+        porcentagem_acerto = 0;
+        questions_qtd = 0;
+        qtd_acertos = 0;
+        return;
+      }
     }
+  }
 }
-
 
 //Renderizar form do quizz
 function renderFormQuizz() {
-    console.log("entrei no form do quizz");
-    const container = document.querySelector(".principal");
-    container.innerHTML = ` <form class="form-quizz-stt" action="/">
+  console.log("entrei no form do quizz");
+  const container = document.querySelector(".principal");
+  container.innerHTML = ` <form class="form-quizz-stt" action="/">
                                 <div>
                                     <h2>Comece pelo começo</h2>
                                     <div class="box-inputs">
@@ -252,38 +245,39 @@ function renderFormQuizz() {
                                     <button class="form-quizz-btn" type="submit">Prosseguir pra criar perguntas</button>
                                 </div>
                             </form>`;
-    anexarEventos();
+  anexarEventos();
 }
 
 //Renderizar perguntas do quizz
 function renderFormPergs(el) {
+  const titulo = el.querySelector(".titulo").value;
+  const imagem = el.querySelector(".imagem").value;
+  const numPergs = parseInt(el.querySelector(".num-pergs").value);
+  const numNiveis = parseInt(el.querySelector(".num-niveis").value);
 
-    const titulo = el.querySelector(".titulo").value;
-    const imagem = el.querySelector(".imagem").value;
-    const numPergs = parseInt(el.querySelector(".num-pergs").value);
-    const numNiveis = parseInt(el.querySelector(".num-niveis").value);
+  localStorage.setItem(
+    "quizz",
+    JSON.stringify({
+      title: titulo,
+      image: imagem,
+      questions: [],
+      levels: numNiveis,
+    })
+  );
 
+  let perguntas = [];
 
-    localStorage.setItem("quizz", JSON.stringify({
-        title: titulo,
-        image: imagem,
-        questions: [],
-        levels: numNiveis
-    }));
+  for (let i = 0; i < numPergs; i++) {
+    let visibPerg,
+      visibCard = "";
 
-    let perguntas = [];
+    if (i > 0) {
+      visibPerg = "oculto";
+    } else {
+      visibCard = "oculto";
+    }
 
-    for (let i = 0; i < numPergs; i++) {
-
-        let visibPerg, visibCard = "";
-
-        if (i > 0) {
-            visibPerg = "oculto";
-        } else {
-            visibCard = "oculto";
-        }
-
-        perguntas.push(`<div class="form-pergunta">
+    perguntas.push(`<div class="form-pergunta">
                             <div id="${visibPerg}">
                                 <div class="pergunta">
                                     <h3>Pergunta ${i + 1}</h3>
@@ -319,102 +313,91 @@ function renderFormPergs(el) {
                                 </a>
                             </div>
                         </div>`);
-    }
+  }
 
-    const container = document.querySelector(".principal");
+  const container = document.querySelector(".principal");
 
-    container.innerHTML = ` <form class="form-quizz-pergs">
+  container.innerHTML = ` <form class="form-quizz-pergs">
                                 <h2>Crie suas perguntas</h2>
                                 <div>
-                                ${perguntas.map(item => item)}
+                                ${perguntas.map((item) => item)}
                                 </div>
                                 <div>
                                     <button type="submit" class="form-quizz-btn">Prosseguir pra criar níveis</button>
                                 </div>
                             </form>`;
-    anexarEventos();
+  anexarEventos();
 }
 
 //Renderizar niveis do quiz
 function renderFormNiveis(el) {
+  let stop = false;
 
-    let stop = false;
+  let dadosPerg = [];
 
-    let dadosPerg = [];
+  const perguntas = [...el.querySelectorAll(".form-pergunta")];
 
-    const perguntas = [...el.querySelectorAll(".form-pergunta")];
+  perguntas.map((item) => {
+    let pergunta = {
+      title: item.firstElementChild.children[0].children[1].value,
+      color: item.firstElementChild.children[0].children[2].value,
+      answers: [
+        {
+          text: item.firstElementChild.children[1].children[1].value,
+          image: item.firstElementChild.children[1].children[2].value,
+          isCorrectAnswer: true,
+        },
+      ],
+    };
 
-    perguntas.map(
-        item => {
-            let pergunta = {
-                title: item.firstElementChild.children[0].children[1].value,
-                color: item.firstElementChild.children[0].children[2].value,
-                answers: [
-                    {
-                        text: item.firstElementChild.children[1].children[1].value,
-                        image: item.firstElementChild.children[1].children[2].value,
-                        isCorrectAnswer: true
-                    }
-                ]
-            }
+    const respIncorr = [...item.firstElementChild.children[2].children];
 
-            const respIncorr = [...item.firstElementChild.children[2].children];
+    respIncorr.map((resp) => {
+      if (respIncorr.indexOf(resp) > 0) {
+        let texto = resp.children[0].value;
+        let url = resp.children[1].value;
 
-            respIncorr.map(
-                resp => {
-
-                    if (respIncorr.indexOf(resp) > 0) {
-
-                        let texto = resp.children[0].value;
-                        let url = resp.children[1].value;
-
-                        if (!!texto && !!url) {
-                            pergunta.answers.push(
-                                {
-                                    text: texto,
-                                    image: url,
-                                    isCorrectAnswer: false
-                                }
-                            );
-                        } else {
-                            if (!!texto || !!url) {
-                                stop = true;
-                            }
-                        }
-                    }
-
-                }
-
-            );
-
-            dadosPerg.push(pergunta);
+        if (!!texto && !!url) {
+          pergunta.answers.push({
+            text: texto,
+            image: url,
+            isCorrectAnswer: false,
+          });
+        } else {
+          if (!!texto || !!url) {
+            stop = true;
+          }
         }
-    );
+      }
+    });
 
-    if (!stop) {
-        let quizz = JSON.parse(localStorage.getItem("quizz"));
-        quizz.questions = dadosPerg;
-        localStorage.setItem("quizz", JSON.stringify(quizz));
+    dadosPerg.push(pergunta);
+  });
 
+  if (!stop) {
+    let quizz = JSON.parse(localStorage.getItem("quizz"));
+    quizz.questions = dadosPerg;
+    localStorage.setItem("quizz", JSON.stringify(quizz));
 
-        let niveis = [];
+    let niveis = [];
 
-        for (let i = 0; i < parseInt(quizz.levels); i++) {
+    for (let i = 0; i < parseInt(quizz.levels); i++) {
+      console.log("entrei na iteração dos níveis");
 
-            console.log("entrei na iteração dos níveis");
+      let visibPerg,
+        visibCard,
+        max = "";
 
-            let visibPerg, visibCard, max = "";
+      if (i > 0) {
+        visibPerg = "oculto";
+        max = 100;
+      } else {
+        visibCard = "oculto";
+        max = 0;
+      }
 
-            if (i > 0) {
-                visibPerg = "oculto";
-                max = 100;
-            } else {
-                visibCard = "oculto";
-                max = 0;
-            }
-
-            niveis.push(
-                `<div class="form-nivel">
+      niveis.push(
+        `<div class="form-nivel">
                 <div id="${visibPerg}">
                     <h3>Nível ${i + 1}</h3>
                     <div class="nivel">
@@ -430,94 +413,89 @@ function renderFormNiveis(el) {
                         <img src="./assets/img/edit-btn.svg" alt="">
                     </a>
                 </div>
-            </div>`);
-        }
+            </div>`
+      );
+    }
 
+    const container = document.querySelector(".principal");
 
-
-        const container = document.querySelector(".principal");
-
-        container.innerHTML = ` <form class="form-quizz-niveis">
+    container.innerHTML = ` <form class="form-quizz-niveis">
                                     <h2>Agora, decida os níveis</h2>
                                     <div>
-                                    ${niveis.map(item => item)}
+                                    ${niveis.map((item) => item)}
                                     </div>
                                     <div>
                                         <button type="submit" class="form-quizz-btn">Finalizar Quizz</button>
                                     </div>
                                 </form>`;
 
-        anexarEventos();
-    }else{
-        alert("Cada resposta deve conter um titulo e url");
-    }
-
-
+    anexarEventos();
+  } else {
+    alert("Cada resposta deve conter um titulo e url");
+  }
 }
 
 function salvarQuizz(el) {
+  let dadosNiveis = [];
 
-    let dadosNiveis = [];
+  const niveis = [...el.querySelectorAll(".form-nivel")];
 
-    const niveis = [...el.querySelectorAll(".form-nivel")];
+  niveis.map((item) => {
+    let nivel = {
+      title: item.firstElementChild.children[1].children[0].value,
+      image: item.firstElementChild.children[1].children[2].value,
+      text: item.firstElementChild.children[1].children[3].value,
+      minValue: item.firstElementChild.children[1].children[1].value,
+    };
 
-    niveis.map(
-        item => {
-            let nivel = {
-                title: item.firstElementChild.children[1].children[0].value,
-                image: item.firstElementChild.children[1].children[2].value,
-                text: item.firstElementChild.children[1].children[3].value,
-                minValue: item.firstElementChild.children[1].children[1].value
-            }
+    dadosNiveis.push(nivel);
+  });
 
-            dadosNiveis.push(nivel);
-        }
-    );
+  let quizz = JSON.parse(localStorage.getItem("quizz"));
+  quizz.levels = dadosNiveis;
+  localStorage.setItem("quizz", JSON.stringify(quizz));
 
-
-    let quizz = JSON.parse(localStorage.getItem("quizz"));
-    quizz.levels = dadosNiveis;
-    localStorage.setItem("quizz", JSON.stringify(quizz));
-
-    enviarQuizz(quizz);
-
+  enviarQuizz(quizz);
 }
 
-
 function enviarQuizz(obj) {
+  const promisse = axios.post(
+    "https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",
+    obj
+  );
 
+  promisse.then((resp) => {
+    let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
+    if (!!quizzesCriados) {
+      quizzesCriados = quizzesCriados.quizzes;
+      quizzesCriados.push(resp.data);
+      localStorage.setItem(
+        "quizzesCriados",
+        JSON.stringify({ quizzes: quizzesCriados })
+      );
+      sucessoQuizz(resp.data);
+    } else {
+      localStorage.setItem(
+        "quizzesCriados",
+        JSON.stringify({ quizzes: [resp.data] })
+      );
+    }
+  });
 
-    const promisse = axios.post('https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes', obj);
-
-    promisse.then(resp => {
-
-        let quizzesCriados = JSON.parse(localStorage.getItem("quizzesCriados"));
-        if (!!quizzesCriados) {
-            quizzesCriados = quizzesCriados.quizzes;
-            quizzesCriados.push(resp.data);
-            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: quizzesCriados }));
-            sucessoQuizz(resp.data);
-        } else {
-            localStorage.setItem("quizzesCriados", JSON.stringify({ quizzes: [resp.data] }));
-        }
-
-    });
-
-    promisse.catch(resp => console.log(resp));
+  promisse.catch((resp) => console.log(resp));
 }
 
 function sucessoQuizz(obj) {
+  const container = document.querySelector(".principal");
 
-    const container = document.querySelector(".principal");
-
-    const quizz = `<div id=${obj.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${obj.image}')" onclick="paginaQuizz(${obj.id})">
+  const quizz = `<div id=${obj.id} class="quizz" style="background-image:linear-gradient(to top, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0.8) 8%, rgba(0,0,0,5) 23%, rgba(0,0,0,0)) ,url('${obj.image}')" onclick="paginaQuizz(${obj.id})">
                                     
                                         <div class="titulo">
                                             <h2>${obj.title}</h2>
                                         </div>
                                     </div>`;
 
-    container.innerHTML = `  <div class="container-sucess-quizz">
+  container.innerHTML = `  <div class="container-sucess-quizz">
                                 <h2>Seu quizz está pronto!</h2>
                                 ${quizz}
                                 <button onclick="paginaQuizz(${obj.id})">Acessar Quizz</button>
@@ -526,55 +504,42 @@ function sucessoQuizz(obj) {
 }
 
 function alterarVisibilidade(el) {
-    el.removeAttribute("id");
-    el.nextElementSibling.setAttribute("id", "oculto");
+  el.removeAttribute("id");
+  el.nextElementSibling.setAttribute("id", "oculto");
 }
 
-
 function anexarEventos() {
+  const criarQuizz = document.querySelector(".make-quizz");
+  if (!!criarQuizz) {
+    criarQuizz.addEventListener("click", (event) => {
+      renderFormQuizz();
+    });
+  }
 
-    const criarQuizz = document.querySelector(".make-quizz");
-    if (!!criarQuizz) {
-        criarQuizz.addEventListener("click", (event) => {
-            renderFormQuizz();
-        });
-    }
+  const formQuizz = document.querySelector(".form-quizz-stt");
+  if (!!formQuizz) {
+    formQuizz.addEventListener("submit", (event) => {
+      event.preventDefault();
+      renderFormPergs(formQuizz);
+    });
+  }
 
+  const formPergs = document.querySelector(".form-quizz-pergs");
+  if (!!formPergs) {
+    formPergs.addEventListener("submit", (event) => {
+      event.preventDefault();
+      renderFormNiveis(formPergs);
+    });
+  }
 
-    const formQuizz = document.querySelector(".form-quizz-stt");
-    if (!!formQuizz) {
-        formQuizz.addEventListener('submit', (event) => {
-            event.preventDefault();
-            renderFormPergs(formQuizz);
-        });
-    }
-
-    const formPergs = document.querySelector(".form-quizz-pergs");
-    if (!!formPergs) {
-        formPergs.addEventListener('submit', (event) => {
-            event.preventDefault();
-            renderFormNiveis(formPergs);
-        });
-    }
-
-    const formNiveis = document.querySelector(".form-quizz-niveis");
-    if (!!formNiveis) {
-        formNiveis.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const quizz = JSON.parse(localStorage.getItem("quizz"));
-            salvarQuizz(formNiveis);
-        });
-    }
-
+  const formNiveis = document.querySelector(".form-quizz-niveis");
+  if (!!formNiveis) {
+    formNiveis.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const quizz = JSON.parse(localStorage.getItem("quizz"));
+      salvarQuizz(formNiveis);
+    });
+  }
 }
 
 anexarEventos();
-
-
-
-
-
-
-
-
-
